@@ -1,29 +1,36 @@
 import requests
-from requests.auth import HTTPBasicAuth
 import os
+from pprint import pprint
+from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 load_dotenv()
-SHEETY_ENDPOINT="https://api.sheety.co/1229a7668b922a6cc01b2817f04a99c9/copyOfFlightDeals/prices"
 class DataManager:
     def __init__(self):
-        self._USERNAME=os.environ["USERNAME"]
-        self._PASSWORD=os.environ["PASSWORD"]
-        self.auth=HTTPBasicAuth(username=self._USERNAME, password=self._PASSWORD)
-        self.Get_Data={}
-    def get_data(self):
-        response=requests.get(url=SHEETY_ENDPOINT,headers=self.header)
-        data=response.json()
-        self.Get_Data=data["prices"]
-        return self.Get_Data
-    def update_iata(self):
-        for city in self.Get_Data:
-            new_data={
-                "price":{
-                    "iataCode":city["iataCode"]
+    
+        self.PRICES_ENDPOINT = os.getenv("API_ENDPOINT")
+        self.USER_NAME= os.getenv("USER_NAME")
+        self.PASSWORD= os.getenv("PASSWORD")
+        self.auth = HTTPBasicAuth(self.USER_NAME, self.PASSWORD)
+        self.get_destination={}
+    def get_destination_data(self):
+        response = requests.get(url=self.PRICES_ENDPOINT, auth=self.auth)
+        response.raise_for_status()
+        data = response.json()
+        self.get_destination = data["prices"]
+        return self.get_destination
+    def update_destination_codes(self):
+        for city in self.get_destination:
+            new_data = {
+                "price": {
+                    "iataCode": city["iataCode"]
                 }
             }
-            response=requests.put(url=f"{SHEETY_ENDPOINT}/{city['id']}", json=new_data, headers=self.header)
-            print(response.text)
-        
+            response = requests.put(
+                url=f"{self.PRICES_ENDPOINT}/{city['id']}",
+                json=new_data,
+            )
+            
+    
+
 
     
