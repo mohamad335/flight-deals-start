@@ -1,0 +1,8 @@
+we create a flight deal project to get the information from flight api about the cheapest flight of city name that i put it on google sheet and the information of cheapest flight was send by twilio
+Use the Sheety API to GET all the data in that sheet google and print it out 
+the sheet google was empty of iatacode of city name so we update the data of iataCode of all city 
+by using amadeus api to get all information we need of flight like cost and date and the destination city and of course origin city 
+so i put the origin iatacode city name of london that is LON to all aitacode on sheet google by using for loop 
+then i get the cheapest flight and then send the cheapset flight sms message by using twilio 
+note: iatacode is code of airport of city name 
+best regards 
