@@ -8,10 +8,12 @@ class DataManager:
     def __init__(self):
     
         self.PRICES_ENDPOINT = os.getenv("API_ENDPOINT")
+        self.USERS = os.getenv("USERS_ENDPOINT")
         self.USER_NAME= os.getenv("USER_NAME")
         self.PASSWORD= os.getenv("PASSWORD")
         self.auth = HTTPBasicAuth(self.USER_NAME, self.PASSWORD)
         self.get_destination={}
+        self.customers={}
     def get_destination_data(self):
         response = requests.get(url=self.PRICES_ENDPOINT, auth=self.auth)
         response.raise_for_status()
@@ -30,7 +32,13 @@ class DataManager:
                 json=new_data,
             )
             
-    
+    def get_customer_emails(self):
+        customers_endpoint = f"{self.USERS}"
+        response = requests.get(customers_endpoint, auth=self.auth)
+        data = response.json()
+        self.customers = data["users"]
+        return self.customers
+
 
 
     
